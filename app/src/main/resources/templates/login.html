@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - WebWake Droid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- Error Notification -->
+    <div id="notification" class="fixed top-0 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-6 py-3 rounded-b-lg shadow-lg hidden z-50">
+        <p id="notification-message"></p>
+    </div>
+
+    <main class="flex-grow flex items-center justify-center">
+        <div class="w-full max-w-xs">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="post" action="/login">
+                <h1 class="text-2xl font-bold text-center mb-4">WebWake Droid</h1>
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="username">
+                    Username
+                </label>
+                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="username" name="username" type="text" placeholder="Username">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2" for="password">
+                    Password
+                </label>
+                <div class="flex items-center">
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline" id="password" name="password" type="password" placeholder="******************">
+                    <button type="button" aria-label="Toggle password visibility" class="ml-2 mb-3" onclick="togglePasswordVisibility('password', this)">
+                        <span class="text-gray-700 text-sm">Show</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex items-center justify-between">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                    Sign In
+                </button>
+            </div>
+        </form>
+    </div>
+    </main>
+
+    <footer class="text-center py-4 mt-auto">
+        <p class="text-gray-500">
+            Crafted by <a href="https://github.com/Zynkia" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-700">Zynkia</a> with ❤️ |
+            Licensed under <a href="https://github.com/Zynkia/WebWake-Droid/blob/main/LICENSE" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-700">AGPL-v3</a> |
+            <a href="https://github.com/Zynkia/WebWake-Droid" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-700">GitHub Repository</a>
+        </p>
+    </footer>
+    <script>
+        function showNotification(text) {
+            const notification = document.getElementById('notification');
+            const message = document.getElementById('notification-message');
+            message.textContent = text;
+            notification.classList.remove('hidden');
+            setTimeout(() => {
+                notification.classList.add('hidden');
+            }, 3000);
+        }
+
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            const span = button.querySelector('span');
+            if (input.type === 'password') {
+                input.type = 'text';
+                span.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                span.textContent = 'Show';
+            }
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('error')) {
+            const error = urlParams.get('error');
+            if (error === 'invalid_credentials') {
+                showNotification('Invalid username or password.');
+            }
+        }
+    </script>
+</body>
+</html>

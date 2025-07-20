@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - WebWake Droid</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .update-notification {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col min-h-screen">
+    <!-- UPDATE_NOTIFICATION -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/dashboard" class="text-xl font-bold">WebWake Droid</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <a href="/dashboard" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                    <a href="/logout" class="text-gray-500 hover:text-gray-700 px-3 py-2 rounded-md text-sm font-medium">Logout</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Notification Container -->
+    <div id="notification-container" class="fixed top-4 left-1/2 -translate-x-1/2 space-y-2 z-50"></div>
+    <div class="py-10">
+        <header>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h1 class="text-3xl font-bold leading-tight text-gray-900">
+                    Settings
+                </h1>
+            </div>
+        </header>
+        <main>
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mt-8 space-y-8">
+                <!-- User Settings -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">User Settings</h2>
+                    <form id="user-settings-form">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="username">Username</label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="username" type="text">
+                        </div>
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="password">New Password</label>
+                            <div class="flex items-center">
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="password" type="password" placeholder="Leave blank to keep current password">
+                                <button type="button" aria-label="Toggle password visibility" class="ml-2" onclick="togglePasswordVisibility('password', this)">
+                                    <span class="text-gray-700 text-sm">Show</span>
+                                </button>
+                            </div>
+                        </div>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>
+                    </form>
+                </div>
+
+                <!-- HTTP Port Settings -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">HTTP Port</h2>
+                    <form id="http-port-form">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="http-port">Port</label>
+                            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="http-port" type="number" min="1" max="65535">
+                        </div>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>
+                    </form>
+                </div>
+
+                <!-- Ngrok Tunnel -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">Ngrok Tunnel</h2>
+                    <div class="text-sm text-yellow-600 bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-4">
+                        Requires root access to run.
+                    </div>
+                    <form id="ngrok-form">
+                        <div class="flex items-center mb-4">
+                            <label for="ngrok-enabled" class="flex items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" id="ngrok-enabled" class="sr-only">
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-gray-700 font-medium">
+                                    Enable Ngrok Tunnel
+                                </div>
+                            </label>
+                        </div>
+                        <div id="ngrok-inputs">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="ngrok-auth-token">Auth Token</label>
+                                <div class="flex items-center">
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="ngrok-auth-token" type="password">
+                                    <button type="button" aria-label="Toggle password visibility" class="ml-2" onclick="togglePasswordVisibility('ngrok-auth-token', this)">
+                                        <span class="text-gray-700 text-sm">Show</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="ngrok-domain">Custom Domain (Optional)</label>
+                                <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="ngrok-domain" type="text">
+                            </div>
+                        </div>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>
+                    </form>
+                </div>
+
+                <!-- Cloudflare Tunnel -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">Cloudflare Tunnel</h2>
+                    <div class="text-sm text-yellow-600 bg-yellow-100 border-l-4 border-yellow-500 p-4 mb-4">
+                        Requires root access to run.
+                    </div>
+                    <form id="cloudflare-form">
+                        <div class="flex items-center mb-4">
+                            <label for="cloudflare-enabled" class="flex items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" id="cloudflare-enabled" class="sr-only">
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-gray-700 font-medium">
+                                    Enable Cloudflare Tunnel
+                                </div>
+                            </label>
+                        </div>
+                        <div id="cloudflare-inputs">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="tunnel-token">Tunnel Token</label>
+                                <div class="flex items-center">
+                                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="tunnel-token" type="password">
+                                    <button type="button" aria-label="Toggle password visibility" class="ml-2" onclick="togglePasswordVisibility('tunnel-token', this)">
+                                        <span class="text-gray-700 text-sm">Show</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>
+                    </form>
+                </div>
+
+                <!-- Logging Settings -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">Logging</h2>
+                    <form id="logging-form">
+                        <div class="flex items-center mb-4">
+                            <label for="log-to-file-enabled" class="flex items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" id="log-to-file-enabled" class="sr-only">
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-gray-700 font-medium">
+                                    Save logs to file
+                                </div>
+                            </label>
+                        </div>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>
+                    </form>
+                </div>
+
+                <!-- SSL Settings -->
+                <div class="bg-white shadow-md rounded-lg p-6">
+                    <h2 class="text-2xl font-bold mb-4">SSL Settings</h2>
+                    <form id="ssl-form">
+                        <div class="flex items-center mb-4">
+                             <label for="https-enabled" class="flex items-center cursor-pointer">
+                                <div class="relative">
+                                    <input type="checkbox" id="https-enabled" class="sr-only">
+                                    <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                                </div>
+                                <div class="ml-3 text-gray-700 font-medium">
+                                    Enable HTTPS
+                                </div>
+                            </label>
+                        </div>
+                        <div id="ssl-inputs">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="ssl-cert">Certificate</label>
+                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="ssl-cert" rows="5"></textarea>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 text-sm font-bold mb-2" for="ssl-key">Private Key</label>
+                                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700" id="ssl-key" rows="5"></textarea>
+                            </div>
+                        </div>
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" type="submit">Save</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <footer class="text-center py-4 mt-auto">
+        <p class="text-gray-500">
+            Crafted by <a href="https://github.com/Zynkia" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-700">Zynkia</a> with ❤️ |
+            Licensed under <a href="https://github.com/Zynkia/WebWake-Droid/blob/main/LICENSE" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-700">AGPL-v3</a> |
+            <a href="https://github.com/Zynkia/WebWake-Droid" target="_blank" rel="noopener" class="text-gray-500 hover:text-gray-700">GitHub Repository</a>
+        </p>
+    </footer>
+    <script>
+        function showNotification(text, type = 'success') {
+            const container = document.getElementById('notification-container');
+            const maxNotifications = 3;
+
+            if (container.children.length >= maxNotifications) {
+                container.removeChild(container.firstChild);
+            }
+            
+            const notification = document.createElement('div');
+            notification.className = 'text-white px-6 py-3 rounded-lg shadow-lg transition-opacity duration-300';
+            
+            if (type === 'error') {
+                notification.classList.add('bg-red-500');
+            } else {
+                notification.classList.add('bg-green-500');
+            }
+            
+            notification.textContent = text;
+            
+            container.appendChild(notification);
+            
+            // Force a reflow to enable the transition
+            notification.offsetHeight; 
+            
+            notification.style.opacity = '1';
+
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                setTimeout(() => {
+                    notification.remove();
+                }, 300);
+            }, 3000);
+        }
+
+        // User Settings
+        fetch('/api/user/username')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('username').value = data.username;
+            });
+
+        document.getElementById('user-settings-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            fetch('/api/user', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, passwordHash: password })
+            }).then(() => showNotification('User settings saved.'));
+        });
+
+        // HTTP Port
+        document.getElementById('http-port-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const portInput = document.getElementById('http-port');
+            const port = portInput.value;
+
+            if (!port) {
+                showNotification('Port number cannot be empty.', 'error');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('port', port);
+            fetch('/api/port/update', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            }).then(() => showNotification('Port settings saved. Please restart the service.'));
+        });
+
+        fetch('/api/port')
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('http-port').value = data.port;
+            });
+
+        function togglePasswordVisibility(inputId, button) {
+            const input = document.getElementById(inputId);
+            const span = button.querySelector('span');
+            if (input.type === 'password') {
+                input.type = 'text';
+                span.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                span.textContent = 'Show';
+            }
+        }
+
+        // Toggle Switch Logic
+        function setupToggle(checkboxId) {
+            const checkbox = document.getElementById(checkboxId);
+            const toggle = checkbox.parentElement;
+            const dot = toggle.querySelector('.dot');
+            const bg = toggle.querySelector('.block');
+
+            function updateToggleVisuals() {
+                if (checkbox.checked) {
+                    bg.classList.remove('bg-gray-600');
+                    bg.classList.add('bg-blue-500');
+                    dot.classList.add('translate-x-full');
+                } else {
+                    bg.classList.remove('bg-blue-500');
+                    bg.classList.add('bg-gray-600');
+                    dot.classList.remove('translate-x-full');
+                }
+            }
+
+            checkbox.addEventListener('change', updateToggleVisuals);
+            // Initial state
+            updateToggleVisuals();
+            return checkbox;
+        }
+
+
+        // Ngrok
+        const ngrokEnabledCheckbox = setupToggle('ngrok-enabled');
+        const ngrokAuthTokenInput = document.getElementById('ngrok-auth-token');
+        const ngrokDomainInput = document.getElementById('ngrok-domain');
+
+        document.getElementById('ngrok-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const isEnabled = ngrokEnabledCheckbox.checked;
+            const authTokenValue = ngrokAuthTokenInput.value;
+            const domainValue = ngrokDomainInput.value;
+
+            const formData = new FormData();
+            formData.append('enabled', isEnabled);
+            formData.append('authToken', authTokenValue);
+            formData.append('domain', domainValue);
+
+            fetch('/api/ngrok/update', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            }).then(response => response.json().then(data => {
+                if (response.ok) {
+                    showNotification('Ngrok settings saved.');
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            }));
+        });
+
+        fetch('/api/ngrok/status')
+            .then(response => response.json())
+            .then(data => {
+                ngrokEnabledCheckbox.checked = data.enabled;
+                ngrokAuthTokenInput.value = data.authToken || '';
+                ngrokDomainInput.value = data.domain || '';
+                ngrokEnabledCheckbox.dispatchEvent(new Event('change'));
+            });
+
+        // Cloudflare
+        const cloudflareEnabledCheckbox = setupToggle('cloudflare-enabled');
+        const tunnelTokenInput = document.getElementById('tunnel-token');
+
+        document.getElementById('cloudflare-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const isEnabled = cloudflareEnabledCheckbox.checked;
+            const tokenValue = tunnelTokenInput.value;
+
+            const formData = new FormData();
+            formData.append('enabled', isEnabled);
+            formData.append('token', tokenValue);
+
+            fetch('/api/cloudflare/update', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            }).then(response => response.json().then(data => {
+                if (response.ok) {
+                    showNotification('Cloudflare settings saved.');
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            }));
+        });
+
+        fetch('/api/cloudflare/status')
+            .then(response => response.json())
+            .then(data => {
+                cloudflareEnabledCheckbox.checked = data.enabled;
+                tunnelTokenInput.value = data.token || '';
+                cloudflareEnabledCheckbox.dispatchEvent(new Event('change'));
+            });
+
+        // SSL
+        const httpsEnabledCheckbox = setupToggle('https-enabled');
+
+        document.getElementById('ssl-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const cert = document.getElementById('ssl-cert').value;
+            const key = document.getElementById('ssl-key').value;
+            const httpsEnabled = httpsEnabledCheckbox.checked;
+
+            const formData = new FormData();
+            formData.append('httpsEnabled', httpsEnabled);
+            formData.append('cert', cert);
+            formData.append('key', key);
+
+            fetch('/api/ssl/update', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            }).then(response => response.json().then(data => {
+                if (response.ok) {
+                    showNotification('SSL settings saved. Please restart the service.');
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            }));
+        });
+
+        fetch('/api/ssl/status')
+            .then(response => response.json())
+            .then(data => {
+                httpsEnabledCheckbox.checked = data.enabled;
+                document.getElementById('ssl-cert').value = data.cert || '';
+                document.getElementById('ssl-key').value = data.key || '';
+                httpsEnabledCheckbox.dispatchEvent(new Event('change'));
+            });
+
+        // Logging
+        const logToFileEnabledCheckbox = setupToggle('log-to-file-enabled');
+
+        document.getElementById('logging-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const isEnabled = logToFileEnabledCheckbox.checked;
+            const formData = new FormData();
+            formData.append('enabled', isEnabled);
+
+            fetch('/api/logging/update', {
+                method: 'POST',
+                body: new URLSearchParams(formData)
+            }).then(response => response.json().then(data => {
+                if (response.ok) {
+                    showNotification('Logging settings saved.');
+                } else {
+                    showNotification('Error: ' + data.message, 'error');
+                }
+            }));
+        });
+
+        fetch('/api/logging/status')
+            .then(response => response.json())
+            .then(data => {
+                logToFileEnabledCheckbox.checked = data.enabled;
+                logToFileEnabledCheckbox.dispatchEvent(new Event('change'));
+            });
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Droid Body -->
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M69,62.39c0,2.21 -1.79,4 -4,4H43c-2.21,0 -4,-1.79 -4,-4V43h30V62.39z"/>
+
+    <!-- Droid Head -->
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M65,26.83C62.7,25.13 59.6,24 56,24h-8c-3.6,0 -6.7,1.13 -9,2.83C36.29,28.33 34,31.45 34,35v8h40v-8C74,31.45 71.71,28.33 69,26.83z"/>
+    <path
+        android:fillColor="#FFF"
+        android:pathData="M46,32m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0"/>
+    <path
+        android:fillColor="#FFF"
+        android:pathData="M62,32m-3,0a3,3 0,1 1,6 0a3,3 0,1 1,-6 0"/>
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M70,25 L68,22"
+        android:strokeWidth="2"
+        android:strokeColor="#3DDC84"/>
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M38,25 L40,22"
+        android:strokeWidth="2"
+        android:strokeColor="#3DDC84"/>
+
+    <!-- Droid Limbs -->
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M34,48m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"/>
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M74,48m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"/>
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M43,68.39 L43,72.39, 39,72.39, 39,68.39z"/>
+    <path
+        android:fillColor="#3DDC84"
+        android:pathData="M65,68.39 L65,72.39, 69,72.39, 69,68.39z"/>
+
+    <!-- Power Symbol -->
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:strokeLineCap="round"
+        android:pathData="M54,47 V55"/>
+    <path
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="2.5"
+        android:pathData="M54,51 A 8 8 0 1 0 54 49"/>
+</vector>

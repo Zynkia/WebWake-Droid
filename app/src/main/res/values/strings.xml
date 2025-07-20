@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WebWake Droid</string>
+    <string name="service_running">Service is running</string>
+    <string name="service_stopped">Service is stopped</string>
+    <string name="service_error">Service error</string>
+    <string name="status_unknown">Unknown status</string>
+    <string name="open_web_page">Open Web Page</string>
+    <string name="cannot_get_ipv4">Could not get IPv4 address</string>
+    <string name="cannot_get_ipv6">Could not get IPv6 address</string>
+    <string name="about">About</string>
+    <string name="github_project">GitHub Project</string>
+    <string name="license">License</string>
+</resources>
